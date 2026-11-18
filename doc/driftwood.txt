@@ -1,0 +1,85 @@
+*driftwood.txt*  VSCode-style mouse window handling
+
+==============================================================================
+CONTENTS                                                    *driftwood*
+
+  1. Introduction ............ |driftwood-intro|
+  2. Setup ................... |driftwood-setup|
+  3. Mouse actions ........... |driftwood-actions|
+  4. Integrations ............ |driftwood-integrations|
+  5. Highlights .............. |driftwood-highlights|
+
+==============================================================================
+1. INTRODUCTION                                             *driftwood-intro*
+
+driftwood maps the left mouse button and handles a few window areas itself:
+separators, winbars, the nvim-tree window and the bufferline tabline. Every
+other mouse event is passed through, so clicks, drag-select and insert-mode
+clicks behave exactly as without the plugin.
+
+Requires Neovim 0.10+ and 'mouse' set to "a". Works the same inside tmux
+with `set -g mouse on`.
+
+==============================================================================
+2. SETUP                                                    *driftwood-setup*
+
+>lua
+  require("driftwood").setup({
+    integrations = { edgy = true, ["nvim-tree"] = true, bufferline = true },
+    winbar = false,
+  })
+<
+
+`integrations`  Turn an integration off by setting it to false. An enabled
+                integration is only loaded when its plugin is installed.
+
+`winbar`        When true, ordinary file windows get a filename-only winbar
+                to use as the drag handle. Windows that already have a
+                winbar are left alone. Dragging windows only works on windows
+                that have a winbar.
+
+==============================================================================
+3. MOUSE ACTIONS                                            *driftwood-actions*
+
+Drag a separator                                  *driftwood-resize*
+    Resize as usual. With edgy.nvim the new size of a dock is kept instead
+    of snapping back on the next relayout.
+
+Double-click a separator                          *driftwood-restore*
+    edgy docks go back to their configured size. Ordinary splits share the
+    space evenly between the two windows next to the separator.
+
+Drag a winbar                                     *driftwood-drag-window*
+    Drop in the middle of another window to swap the two windows' buffers
+    and views. Drop on its left, right, top or bottom quarter to move the
+    dragged window there as a split. Dropping on itself or on a non-file
+    window does nothing. <Esc> cancels.
+
+Drag a file or tab                                *driftwood-drag-file*
+    Drag a file from nvim-tree or a tab from bufferline onto an editor
+    window. The middle opens it in that window, a quarter opens it in a new
+    split on that side. Folders can't be dragged. <Esc> cancels.
+
+Right-click a file in nvim-tree                   *driftwood-popup*
+    The popup menu gets Open, Open to the Right, Open Below and Open in New
+    Tab. They are hidden on folders and outside the tree.
+
+==============================================================================
+4. INTEGRATIONS                                        *driftwood-integrations*
+
+edgy.nvim       Keeps dragged dock sizes, restores them on double-click, and
+                keeps docks out of window dragging (never a source or target).
+
+nvim-tree.lua   File drag source and the right-click entries. Clicks and
+                double-clicks inside the tree keep nvim-tree's own behavior;
+                a drag only starts once the mouse leaves the tree window.
+
+bufferline.nvim Tab drag source. bufferline switches to the tab on press,
+                before the drag starts.
+
+==============================================================================
+5. HIGHLIGHTS                                          *driftwood-highlights*
+
+DriftwoodDrop   The drop area shown while dragging. Default link: PmenuSel.
+
+ vim:tw=78:ts=8:ft=help:norl:
