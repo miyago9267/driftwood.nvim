@@ -2,7 +2,7 @@
 
 VSCode-style mouse window handling for Neovim.
 
-![Dragging the file tree separator in Neovim](assets/demo.gif)
+![Resizing the file tree and dragging a file into a new split](assets/demo.gif)
 
 Status: early. Tested in Ghostty, directly and inside tmux (`mouse on`). Covers window separators, dragging window titles, dragging files from nvim-tree / bufferline, and the nvim-tree right-click menu.
 
