@@ -38,7 +38,8 @@ local function floats()
   return #vim.tbl_filter(function(w) return vim.api.nvim_win_get_config(w).relative ~= "" end, vim.api.nvim_list_wins())
 end
 local function menu_enabled(item)
-  return not vim.fn.execute("nmenu PopUp." .. item):find("n%*%s+%-")
+  -- 0.10 的 :nmenu PopUp.X 會列出整個 PopUp 選單，不能解析它的輸出
+  return vim.fn.menu_info("PopUp." .. item:gsub("\\ ", " "), "n").enabled == true
 end
 
 local function drag_case(file, row, col, check, mid)
